@@ -123,6 +123,24 @@ namespace BandTracker
 
       Assert.Equal(newDetails, result);
     }
+    [Fact]
+    public void Test_Search_SearchVenueByLocation()
+    {
+      Venue testVenue1 = new Venue("Crystal Ballroom", "1332 W. Burnside, Portland, OR 97209", "Details about the Crystal Ballroom venue.");
+      testVenue1.Save();
+
+      Venue testVenue2 = new Venue("The Tripple Door", "Seattle, WA", "Details about The Triple Door venue.");
+      testVenue2.Save();
+
+      Venue testVenue3 = new Venue("Doug Fir Lounge", "Portland, Oregon", "Details about the Doug Fir Lounge venue.");
+      testVenue3.Save();
+
+      List<Venue> searchedVenueInput = Venue.SearchVenueLocation("portland");
+
+      List<Venue> Result = new List<Venue>{testVenue1, testVenue3};
+
+      Assert.Equal(Result, searchedVenueInput);
+    }
     public void Dispose()
     {
       Venue.DeleteAll();

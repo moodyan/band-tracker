@@ -229,10 +229,10 @@ namespace BandTracker.Objects
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand ("UPDATE venues SET details = @NewDetails OUTPUT INSERTED.details WHERE id = @RecipeId;", conn);
+      SqlCommand cmd = new SqlCommand ("UPDATE venues SET details = @NewDetails OUTPUT INSERTED.details WHERE id = @VenueId;", conn);
 
       cmd.Parameters.AddWithValue("@NewDetails", newDetails);
-      cmd.Parameters.AddWithValue("@RecipeId", _id);
+      cmd.Parameters.AddWithValue("@VenueId", _id);
       SqlDataReader rdr = cmd.ExecuteReader();
 
       while(rdr.Read())
@@ -265,6 +265,42 @@ namespace BandTracker.Objects
       {
         conn.Close();
       }
+    }
+    public static List<Venue> SearchVenueLocation(string searchVenueLocation)
+    {
+      List<Venue> allVenues = new List<Venue>{};
+
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM venues WHERE location LIKE @VenueLocation;", conn);
+
+      SqlParameter venueLocationParam = new SqlParameter();
+      venueLocationParam.ParameterName = "@VenueLocation";
+      venueLocationParam.Value = "%" + searchVenueLocation + "%";
+
+      cmd.Parameters.Add(venueLocationParam);
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        int venueId = rdr.GetInt32(0);
+        string venueName = rdr.GetString(1);
+        string location = rdr.GetString(2);
+        string details = rdr.GetString(3);
+        Venue newVenue = new Venue(venueName, location, details, venueId);
+        allVenues.Add(newVenue);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return allVenues;
     }
   }
 }
