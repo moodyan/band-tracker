@@ -93,6 +93,22 @@ namespace BandTracker
 
       Assert.Equal(testList, result);
     }
+    public void Delete_DeletesVenueAssociationsFromDataBase_VenueList()
+    {
+      Band testBand = new Band("Bon Iver", "Justin Vernon", "Indie Folk", "Information about the band Bon Iver.");
+      testBand.Save();
+
+      Venue testVenue = new Venue("Crystal Ballroom", "Portland, OR", "Details about the Crystal Ballroom venue.");
+      testVenue.Save();
+
+      testVenue.AddBand(testBand);
+      testVenue.Delete();
+
+      List<Venue> result = testBand.GetVenues();
+      List<Venue> test = new List<Venue>{};
+
+      Assert.Equal(test, result);
+    }
     public void Dispose()
     {
       Venue.DeleteAll();

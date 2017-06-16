@@ -171,14 +171,14 @@ namespace BandTracker.Objects
       Band foundBand = new Band(foundBandName, foundMembers, foundGenre, foundBandInfo, foundBandId);
 
       if (rdr != null)
-     {
+      {
        rdr.Close();
-     }
-     if (conn != null)
-     {
-       conn.Close();
-     }
-     return foundBand;
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return foundBand;
     }
 
     public void AddVenue(Venue newVenue)
@@ -231,7 +231,6 @@ namespace BandTracker.Objects
         Venue newVenue = new Venue(venueName, venueLocation, venueDetails, venueId);
         venues.Add(newVenue);
       }
-
       if (rdr != null)
       {
         rdr.Close();
@@ -241,6 +240,24 @@ namespace BandTracker.Objects
         conn.Close();
       }
       return venues;
+    }
+    public void Delete()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("DELETE FROM bands WHERE id = @BandId; DELETE FROM bands_venues WHERE bands_id = @BandId;", conn);
+      SqlParameter bandIdParameter = new SqlParameter();
+      bandIdParameter.ParameterName = "@BandId";
+      bandIdParameter.Value = this.GetId();
+
+      cmd.Parameters.Add(bandIdParameter);
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
     }
   }
 }

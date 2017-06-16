@@ -205,25 +205,42 @@ namespace BandTracker.Objects
       List<Band> bands = new List<Band> {};
 
       while(rdr.Read())
-        {
-          int thisBandId = rdr.GetInt32(0);
-          string bandName = rdr.GetString(1);
-          string members = rdr.GetString(2);
-          string genre = rdr.GetString(3);
-          string bandInfo = rdr.GetString(4);
-          Band foundBand = new Band(bandName, members, genre, bandInfo, thisBandId);
-          bands.Add(foundBand);
-        }
-        if (rdr != null)
-        {
-          rdr.Close();
-        }
-
+      {
+        int thisBandId = rdr.GetInt32(0);
+        string bandName = rdr.GetString(1);
+        string members = rdr.GetString(2);
+        string genre = rdr.GetString(3);
+        string bandInfo = rdr.GetString(4);
+        Band foundBand = new Band(bandName, members, genre, bandInfo, thisBandId);
+        bands.Add(foundBand);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
       if (conn != null)
       {
         conn.Close();
       }
       return bands;
+    }
+    public void Delete()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("DELETE FROM venues WHERE id = @VenueId; DELETE FROM bands_venues WHERE venues_id = @VenueId;", conn);
+      SqlParameter venueIdParameter = new SqlParameter();
+      venueIdParameter.ParameterName = "@VenueId";
+      venueIdParameter.Value = this.GetId();
+
+      cmd.Parameters.Add(venueIdParameter);
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
     }
   }
 }
