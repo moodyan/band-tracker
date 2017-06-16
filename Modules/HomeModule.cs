@@ -38,12 +38,12 @@ namespace BandTracker
       };
       Get["band/{id}"] = parameters => {
         Dictionary<string, object> model = new Dictionary<string, object>();
-        Band SelectedBand = Band.Find(parameters.id);
-        List<Venue> VenueBand = SelectedBand.GetVenues();
-        List<Venue> AllVenues = Venue.GetAll();
-        model.Add("band", SelectedBand);
-        model.Add("venueBand", VenueBand);
-        model.Add("allVenues", AllVenues);
+        Band selectedBand = Band.Find(parameters.id);
+        List<Venue> bandVenues = selectedBand.GetVenues();
+        List<Venue> allVenues = Venue.GetAll();
+        model.Add("band", selectedBand);
+        model.Add("bandVenues", bandVenues);
+        model.Add("allVenues", allVenues);
         return View["band.cshtml", model];
       };
       Post["band/success"] = _ => {
@@ -54,12 +54,12 @@ namespace BandTracker
       };
       Get["venue/{id}"] = parameters => {
         Dictionary<string, object> model = new Dictionary<string, object>();
-        Venue SelectedVenue = Venue.Find(parameters.id);
-        List<Band> BandVenue = SelectedVenue.GetBands();
-        List<Band> AllBands = Band.GetAll();
-        model.Add("venue", SelectedVenue);
-        model.Add("bandVenue", BandVenue);
-        model.Add("allBands", AllBands);
+        Venue selectedVenue = Venue.Find(parameters.id);
+        List<Band> venueBands = selectedVenue.GetBands();
+        List<Band> allBands = Band.GetAll();
+        model.Add("venue", selectedVenue);
+        model.Add("venueBands", venueBands);
+        model.Add("allBands", allBands);
         return View["venue.cshtml", model];
       };
       Post["venue/success"] = _ => {
@@ -68,7 +68,7 @@ namespace BandTracker
         band.AddVenue(venue);
         return View["success.cshtml"];
       };
-      Patch["/venue/update/instructions/{id}"] = parameters => {
+      Patch["/venue/update/details/{id}"] = parameters => {
         Venue CurrentVenue = Venue.Find(parameters.id);
         string newDetails = Request.Form["new-details"];
         CurrentVenue.UpdateDetails(newDetails);

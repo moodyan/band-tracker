@@ -5,3 +5,7 @@
 .jumbotron {
   margin-bottom: 0px;
 }
+
+textarea {
+  width: 700px;
+}

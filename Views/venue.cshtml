@@ -1,0 +1,46 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+}
+<h2>Venue: @Model["venue"].GetVenueName()</h2>
+<h4>Location: @Model["venue"].GetLocation()</h4>
+<br>
+<h3>Venue Details:</h3>
+<p>@Model["venue"].GetDetails()</p>
+
+@if (@Model["venueBands"].Count != 0)
+{
+  <hr>
+  <h4>Bands that have played at this venue:</h4>
+  <ul>
+    @foreach (var bands in @Model["venueBands"])
+    {
+      <li><a href="/venue/band/delete/@bands.GetId()">@bands.GetBandName()</a></li>
+    }
+  </ul>
+}
+
+<hr>
+<h3>Add a band that has played at this venue:</h3>
+<form action='/venue/band/success' method='post'>
+  <input id='venue-id' name='venue-id' type='hidden' value='@Model["venue"].GetId()'>
+  <label for='band-id'>Select a band </label>
+  <select id='band-id' name='band-id' type='text'>
+    @foreach (var band in @Model["allBands"])
+    {
+      <option value='@band.GetId()'>@band.GetBandName()</option>
+    }
+  </select>
+  <button type='submit' class="btn btn-success">Add</button>
+</form>
+<hr>
+  <form action='/venue/update/details/@Model["venue"].GetId()' method="post">
+  <input type="hidden" name="_method" value="PATCH">
+  <label for="new-details">New details for this venue: </label>
+  <input type="text" name="new-details" placeholder="New details">
+  <button type="submit" class="btn btn-info">Update</button>
+</form>
+<hr>
+<form action='/venue/delete/@Model["venue"].GetId()' method="post">
+  <input type="hidden" name="_method" value="DELETE">
+  <button type="submit" class="btn btn-danger">Delete this venue</button>
+</form>

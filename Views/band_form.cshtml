@@ -1,0 +1,23 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+}
+<form action="/bands/new" method="post">
+  <label for="band-name">Band Name</label>
+  <input id="band-name" name="band-name" type="text">
+  <br>
+  <br>
+  <label for="band-members">Band Members</label>
+  <input id="band-members" name="band-members" type="text">
+  <br>
+  <br>
+  <label for="band-genre">Genre</label>
+  <input id="band-genre" name="band-genre" type="text">
+  <br>
+  <br>
+  <label for="band-info">Band Information</label>
+  <br>
+  <textarea id="band-info" name="band-info" type="text" rows ="10"></textarea>
+  <br>
+  <button type="submit" class="btn btn-info">Add</button>
+</form>
+</div>
