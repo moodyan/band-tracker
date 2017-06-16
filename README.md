@@ -1,0 +1,1 @@
+CREATE DATABASE band_tracker; GO USE band_tracker; GO CREATE TABLE bands (id INT IDENTITY(1,1), band_name VARCHAR(100), members VARCHAR(255), genre VARCHAR(50), information text); GO CREATE TABLE venues (id INT IDENTITY(1,1), venue_name VARCHAR(100), location VARCHAR(100), details text); GO CREATE TABLE bands_venues (id INT IDENTITY(1,1), bands_id INT, venues_id INT); GO
