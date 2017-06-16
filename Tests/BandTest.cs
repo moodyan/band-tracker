@@ -57,6 +57,42 @@ namespace BandTracker
       Band foundBand = Band.Find(testBand.GetId());
       Assert.Equal(testBand, foundBand);
     }
+    [Fact]
+    public void TestVenue_AddsVenueToBand_VenueList()
+    {
+      Band testBand = new Band("Bon Iver", "Justin Vernon", "Indie Folk", "Information about the band Bon Iver.");
+      testBand.Save();
+
+      Venue testVenue = new Venue("Crystal Ballroom", "Portland, OR", "Details about the Crystal Ballroom venue.");
+      testVenue.Save();
+
+      testBand.AddVenue(testVenue);
+
+      List<Venue> result = testBand.GetVenues();
+      List<Venue> testList = new List<Venue>{testVenue};
+
+      Assert.Equal(testList, result);
+    }
+
+    [Fact]
+    public void Test_ReturnsAllBandsVenues_VenueList()
+    {
+      Band testBand = new Band("Bon Iver", "Justin Vernon", "Indie Folk", "Information about the band Bon Iver.");
+      testBand.Save();
+
+      Venue testVenue1 = new Venue("Crystal Ballroom", "Portland, OR", "Details about the Crystal Ballroom venue.");
+      testVenue1.Save();
+
+      Venue testVenue2 = new Venue("Doug Fir Lounge", "Portland, OR", "Details about the Doug Fir Lounge venue.");
+      testVenue2.Save();
+
+      testBand.AddVenue(testVenue1);
+      testBand.AddVenue(testVenue2);
+      List<Venue> result = testBand.GetVenues();
+      List<Venue> testList = new List<Venue> {testVenue1, testVenue2};
+
+      Assert.Equal(testList, result);
+    }
     public void Dispose()
     {
       Band.DeleteAll();
