@@ -38,6 +38,25 @@ namespace BandTracker
       List<Band> testList = new List<Band>{testBand};
       Assert.Equal(testList, result);
     }
+    [Fact]
+    public void Test_Save_AssignsIdToObject()
+    {
+      Band testBand = new Band("Bon Iver", "Justin Vernon", "Indie Folk", "Information about the band Bon Iver.");
+      testBand.Save();
+
+      int testId = testBand.GetId();
+      int savedBandId = Band.GetAll()[0].GetId();
+      Assert.Equal(testId, savedBandId);
+    }
+    [Fact]
+    public void Test_Find_FindsBandInDatabase()
+    {
+      Band testBand = new Band("Bon Iver", "Justin Vernon", "Indie Folk", "Information about the band Bon Iver.");
+      testBand.Save();
+      
+      Band foundBand = Band.Find(testBand.GetId());
+      Assert.Equal(testBand, foundBand);
+    }
     public void Dispose()
     {
       Band.DeleteAll();
