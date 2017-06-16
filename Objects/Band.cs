@@ -99,5 +99,47 @@ namespace BandTracker.Objects
       }
       return allBands;
     }
+    public void Save()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO bands (band_name, members, genre, information) OUTPUT INSERTED.id VALUES (@BandName, @BandMembers, @BandGenre, @BandInfo)", conn);
+
+      SqlParameter bandNameParameter = new SqlParameter();
+      bandNameParameter.ParameterName = "@BandName";
+      bandNameParameter.Value = this.GetBandName();
+
+      SqlParameter bandMembersParameter = new SqlParameter();
+      bandMembersParameter.ParameterName = "@BandMembers";
+      bandMembersParameter.Value = this.GetMembers();
+
+      SqlParameter bandGenreParameter = new SqlParameter();
+      bandGenreParameter.ParameterName = "@BandGenre";
+      bandGenreParameter.Value = this.GetGenre();
+
+      SqlParameter bandInfoParameter = new SqlParameter();
+      bandInfoParameter.ParameterName = "@BandInfo";
+      bandInfoParameter.Value = this.GetInformation();
+
+      cmd.Parameters.Add(bandNameParameter);
+      cmd.Parameters.Add(bandMembersParameter);
+      cmd.Parameters.Add(bandGenreParameter);
+      cmd.Parameters.Add(bandInfoParameter);
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this._id = rdr.GetInt32(0);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if(conn != null)
+      {
+        conn.Close();
+      }
+    }
   }
 }
