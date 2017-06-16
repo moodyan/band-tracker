@@ -100,6 +100,18 @@ namespace BandTracker
         List<Venue> AllVenues = Venue.GetAll();
         return View["venues.cshtml", AllVenues];
       };
+      Post["band/venue/success"] = _ => {
+        Venue venue = Venue.Find(Request.Form["venue-id"]);
+        Band band = Band.Find(Request.Form["band-id"]);
+        band.AddVenue(venue);
+        return View["success.cshtml"];
+      };
+      Post["venue/band/success"] = _ => {
+        Band band = Band.Find(Request.Form["band-id"]);
+        Venue venue = Venue.Find(Request.Form["venue-id"]);
+        venue.AddBand(band);
+        return View["success.cshtml"];
+      };
       Get["venues/search"] = _ => {
         List<Venue> AllVenues = Venue.GetAll();
         return View["venues_search.cshtml", AllVenues];

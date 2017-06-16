@@ -14,7 +14,7 @@
   <ul>
     @foreach (var bands in @Model["venueBands"])
     {
-      <li><a href="/venue/band/delete/@bands.GetId()">@bands.GetBandName()</a></li>
+      <li>@bands.GetBandName()</li>
     }
   </ul>
 }
