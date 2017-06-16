@@ -1,0 +1,169 @@
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+
+namespace BandTracker.Objects
+{
+  public class Venue
+  {
+    private string _venueName;
+    private string _location;
+    private string _details;
+    private int _id;
+
+    public Venue(string VenueName, string Location, string Details, int Id = 0)
+    {
+      _venueName = VenueName;
+      _location = Location;
+      _details = Details;
+      _id = Id;
+    }
+
+    public int GetId()
+    {
+      return _id;
+    }
+    public string GetVenueName()
+    {
+      return _venueName;
+    }
+    public string GetLocation()
+    {
+      return _location;
+    }
+    public string GetDetails()
+    {
+      return _details;
+    }
+
+    public override bool Equals(System.Object otherVenue)
+    {
+      if (!(otherVenue is Venue))
+      {
+        return false;
+      }
+      else
+      {
+        Venue newVenue = (Venue) otherVenue;
+        bool idEquality = (this.GetId() == newVenue.GetId());
+        bool venueNameEquality = (this.GetVenueName() == newVenue.GetVenueName());
+        bool locationEquality = (this.GetLocation() == newVenue.GetLocation());
+        bool detailsEquality = (this.GetDetails() == newVenue.GetDetails());
+        return (idEquality && venueNameEquality && locationEquality && detailsEquality);
+      }
+    }
+
+    public static void DeleteAll()
+   {
+     SqlConnection conn = DB.Connection();
+     conn.Open();
+     SqlCommand cmd = new SqlCommand("DELETE FROM venues;", conn);
+     cmd.ExecuteNonQuery();
+     conn.Close();
+   }
+
+   public static List<Venue> GetAll()
+    {
+      List<Venue> allVenues = new List<Venue>{};
+
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM venues ORDER BY venue_name;", conn);
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        int venueId = rdr.GetInt32(0);
+        string venueName = rdr.GetString(1);
+        string location = rdr.GetString(2);
+        string details = rdr.GetString(3);
+        Venue newVenue = new Venue(venueName, location, details, venueId);
+        allVenues.Add(newVenue);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return allVenues;
+    }
+    public void Save()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO venues (venue_name, location, details) OUTPUT INSERTED.id VALUES (@VenueName, @VenueLocation, @VenueDetails)", conn);
+
+      SqlParameter venueNameParameter = new SqlParameter();
+      venueNameParameter.ParameterName = "@VenueName";
+      venueNameParameter.Value = this.GetVenueName();
+
+      SqlParameter venueLocationParameter = new SqlParameter();
+      venueLocationParameter.ParameterName = "@VenueLocation";
+      venueLocationParameter.Value = this.GetLocation();
+
+      SqlParameter venueDetailsParameter = new SqlParameter();
+      venueDetailsParameter.ParameterName = "@VenueDetails";
+      venueDetailsParameter.Value = this.GetDetails();
+
+      cmd.Parameters.Add(venueNameParameter);
+      cmd.Parameters.Add(venueLocationParameter);
+      cmd.Parameters.Add(venueDetailsParameter);
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this._id = rdr.GetInt32(0);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if(conn != null)
+      {
+        conn.Close();
+      }
+    }
+    public static Venue Find(int id)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM venues WHERE id = @VenueId;", conn);
+
+      SqlParameter venueIdParameter = new SqlParameter();
+      venueIdParameter.ParameterName = "@VenueId";
+      venueIdParameter.Value = id.ToString();
+      cmd.Parameters.Add(venueIdParameter);
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      int foundVenueId = 0;
+      string foundVenueName = null;
+      string foundLocation = null;
+      string foundDetails = null;
+
+      while(rdr.Read())
+      {
+        foundVenueId = rdr.GetInt32(0);
+        foundVenueName = rdr.GetString(1);
+        foundLocation = rdr.GetString(2);
+        foundDetails = rdr.GetString(3);
+      }
+      Venue foundVenue = new Venue(foundVenueName, foundLocation, foundDetails, foundVenueId);
+
+      if (rdr != null)
+     {
+       rdr.Close();
+     }
+     if (conn != null)
+     {
+       conn.Close();
+     }
+     return foundVenue;
+    }
+  }
+}
