@@ -224,6 +224,30 @@ namespace BandTracker.Objects
       }
       return bands;
     }
+    public void UpdateDetails(string newDetails)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand ("UPDATE venues SET details = @NewDetails OUTPUT INSERTED.details WHERE id = @RecipeId;", conn);
+
+      cmd.Parameters.AddWithValue("@NewDetails", newDetails);
+      cmd.Parameters.AddWithValue("@RecipeId", _id);
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      while(rdr.Read())
+      {
+        this._details = rdr.GetString(0);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
     public void Delete()
     {
       SqlConnection conn = DB.Connection();
