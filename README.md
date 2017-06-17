@@ -21,7 +21,8 @@ Portland, OR 97209" Venue details: "The historic Crystal Ballroom is one of thos
 | 6. The program allows users to update an existing venue's location and/or details.  | Venue's Location (if changed): "" Venue details: "The historic Crystal Ballroom -- now over a century old -- is one of those rare concert halls that can point to a proud, diverse history while also laying claim to an ongoing musical legacy. Every time you enter this majestic ballroom, let your imagination sense the tremors resonating from a century's worth of gatherings, and realize that you are joining a thriving, generations-long procession of show-goers. Welcome!"  | "Success!"  |
 | 7. The program allows users to delete an existing venue from the database.  | "Delete?"  | "Success!"  |
 | 8. The program allows users to delete an existing band from the database.  | "Delete?"  | "Success!"  |
-| 9. MAYBE The program allows users to search for a venue by location.  | Location: "Portland"  | Results: "Crystal Ballroom, Wonder Ballroom, Aladdin Theater, Doug Fir Lounge, Mississippi Studios, Dante's"  |
+| 9. The program allows users to search for a venue by location.  | Location: "Portland"  | Results: "Crystal Ballroom, Wonder Ballroom, Aladdin Theater, Doug Fir Lounge, Mississippi Studios, Dante's"  |
+| 10. MAYBE The program allows users to add shows to a venue and/or a band.  | --   | --  |
 
 ## Setup/Installation Requirements
 
@@ -39,7 +40,8 @@ _**From GitHub: Download or clone project repository onto desktop from GitHub.**
 
 _In your preferred database management system (I use SSMS), open the band_tracker.sql file from the project folder. Run the execute command on the file. If this does not work, run the following command in SQLCMD:
 
-CREATE DATABASE band_tracker; GO USE band_tracker; GO CREATE TABLE bands (id INT IDENTITY(1,1), band_name VARCHAR(100), members VARCHAR(255), genre VARCHAR(50), information text); GO CREATE TABLE venues (id INT IDENTITY(1,1), venue_name VARCHAR(100), location VARCHAR(100), details text); GO CREATE TABLE bands_venues (id INT IDENTITY(1,1), bands_id INT, venues_id INT); GO_
+CREATE DATABASE band_tracker; GO USE band_tracker; GO CREATE TABLE bands (id INT IDENTITY(1,1), band_name VARCHAR(100), members VARCHAR(255), genre VARCHAR(50), information text); GO CREATE TABLE venues (id INT IDENTITY(1,1), venue_name VARCHAR(100), location VARCHAR(100), details text); GO CREATE TABLE bands_venues (id INT IDENTITY(1,1), bands_id INT, venues_id INT); GO CREATE TABLE shows (id INT IDENTITY(1,1), city_state VARCHAR(50), date DATETIME); GO CREATE TABLE tour (id INT IDENTITY(1,1), bands_id INT, shows_id INT, venues_id INT);
+GO_
 
 _To create test database, in your preferred database management system (I use SSMS) open the band_tracker_test.sql file from the project folder. Run the execute command on the file. If this does not work, back up and restore the database as a test database in your preferred database management system.
 
