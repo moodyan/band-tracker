@@ -94,6 +94,42 @@ namespace BandTracker
       Assert.Equal(testList, result);
     }
     [Fact]
+    public void TestShow_AddsShowToBand_ShowList()
+    {
+      Band testBand = new Band("Bon Iver", "Justin Vernon", "Indie Folk", "Information about the band Bon Iver.");
+      testBand.Save();
+
+      Show testShow = new Show("Portland, OR", new DateTime(2017, 06, 16));
+      testShow.Save();
+
+      testBand.AddShow(testShow);
+
+      List<Show> result = testBand.GetShows();
+      List<Show> testList = new List<Show>{testShow};
+
+      Assert.Equal(testList, result);
+    }
+
+    [Fact]
+    public void Test_ReturnsAllBandsShows_ShowList()
+    {
+      Band testBand = new Band("Bon Iver", "Justin Vernon", "Indie Folk", "Information about the band Bon Iver.");
+      testBand.Save();
+
+      Show testShow1 = new Show("Portland, OR", new DateTime(2017, 06, 16));
+      testShow1.Save();
+
+      Show testShow2 = new Show("Seattle, WA", new DateTime(2017, 06, 17));
+      testShow2.Save();
+
+      testBand.AddShow(testShow1);
+      testBand.AddShow(testShow2);
+      List<Show> result = testBand.GetShows();
+      List<Show> testList = new List<Show> {testShow1, testShow2};
+
+      Assert.Equal(testList, result);
+    }
+    [Fact]
     public void Delete_DeletesBandAssociationsFromDataBase_BandList()
     {
       Venue testVenue = new Venue("Doug Fir Lounge", "Portland, OR", "Details about the Doug Fir Lounge venue.");

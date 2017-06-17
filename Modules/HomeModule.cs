@@ -41,8 +41,10 @@ namespace BandTracker
         Band selectedBand = Band.Find(parameters.id);
         List<Venue> bandVenues = selectedBand.GetVenues();
         List<Venue> allVenues = Venue.GetAll();
+        List<Show> bandShows = selectedBand.GetShows();
         model.Add("band", selectedBand);
         model.Add("bandVenues", bandVenues);
+        model.Add("bandShows", bandShows);
         model.Add("allVenues", allVenues);
         return View["band.cshtml", model];
       };
@@ -119,6 +121,23 @@ namespace BandTracker
       Post["venues/search"] = _ => {
         List<Venue> SearchVenueLocation = Venue.SearchVenueLocation(Request.Form["venue-search-location"]);
         return View["venues_search.cshtml", SearchVenueLocation];
+      };
+      Get["band/show/delete/{id}"]= parameters =>{
+        Show SelectedShow = Show.Find(parameters.id);
+        return View["show_band_delete.cshtml", SelectedShow];
+      };
+      // Delete["band/show/delete/{id}"]= parameters =>{
+      //   Show SelectedShow = Show.Find(parameters.id);
+      //   SelectedShow.DeleteShow();
+      //   return View["success.cshtml"];
+      // };
+      Get["/shows/new"] = _ => {
+        return View["show_form.cshtml"];
+      };
+      Post["/shows/new"] = _ => {
+        Show NewShow = new Show(Request.Form["show-location"], Request.Form["show-date"]);
+        NewShow.Save();
+        return View["success.cshtml"];
       };
     }
   }

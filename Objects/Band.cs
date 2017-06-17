@@ -241,6 +241,65 @@ namespace BandTracker.Objects
       }
       return venues;
     }
+    public void AddShow(Show newShow)
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("INSERT INTO bands_venues_shows (bands_id, shows_id) OUTPUT INSERTED.shows_id VALUES (@BandId, @ShowId);", conn);
+
+      SqlParameter bandIdParameter = new SqlParameter();
+      bandIdParameter.ParameterName = "@BandId";
+      bandIdParameter.Value = this.GetId();
+      cmd.Parameters.Add(bandIdParameter);
+
+      SqlParameter showIdParameter = new SqlParameter();
+      showIdParameter.ParameterName = "@ShowId";
+      showIdParameter.Value = newShow.GetId();
+      cmd.Parameters.Add(showIdParameter);
+
+      cmd.ExecuteNonQuery();
+
+      if (conn != null)
+      {
+        conn.Close();
+      }
+    }
+
+    public List<Show> GetShows()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT shows.* FROM bands JOIN bands_venues_shows ON (bands.id = bands_venues_shows.bands_id) JOIN shows ON (bands_venues_shows.shows_id = shows.id) WHERE bands.id = @BandId;", conn);
+      SqlParameter BandIdParam = new SqlParameter();
+      BandIdParam.ParameterName = "@BandId";
+      BandIdParam.Value = this.GetId().ToString();
+
+      cmd.Parameters.Add(BandIdParam);
+
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      List<Show> shows = new List<Show>{};
+
+      while(rdr.Read())
+      {
+        int showId = rdr.GetInt32(0);
+        string showCityState = rdr.GetString(1);
+        DateTime showDate = rdr.GetDateTime(2);
+        Show newShow = new Show(showCityState, showDate, showId);
+        shows.Add(newShow);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return shows;
+    }
     public void Delete()
     {
       SqlConnection conn = DB.Connection();

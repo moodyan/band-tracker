@@ -53,7 +53,7 @@ _In your preferred browser, navigate to http://localhost:5004/ and you should se
 
 ## Known Bugs
 
-_No known bugs._
+_Show Class does not work as intended. Need to change many to many relationship to one-to-many for bands and venues?_
 
 ## Support and contact details
 

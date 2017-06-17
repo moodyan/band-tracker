@@ -1,0 +1,9 @@
+@{
+  Layout="Shared/_Layout.cshtml";
+}
+
+<h2>Are you sure you want to delete this show from this band's tour?</h2>
+<form action="/band/show/delete/@Model.GetId()" method="post">
+  <input type="hidden" name="_method" value="DELETE">
+  <button type="submit" class="btn btn-danger btn-lg">Delete</button>
+</form>
