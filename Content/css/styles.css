@@ -4,8 +4,49 @@
 
 .jumbotron {
   margin-bottom: 0px;
+  background: transparent;
+  color: white;
+  text-align: center;
 }
 
 textarea {
   width: 700px;
+}
+
+body {
+  background: url("../img/bkg.jpg") no-repeat center center fixed;
+  background-size: 100% 100%;
+  color: black
+}
+
+.navbar {
+  background: black;
+  border: none;
+  color: red;
+}
+
+.navbar a:hover {
+  color: red;
+}
+
+footer {
+  color: white;
+}
+
+a {
+  color: white;
+}
+
+a:hover {
+  color: yellow;
+}
+
+.welcome {
+  font-size:100px;
+  color: white;
+}
+
+.body-container {
+  background-color: rgba(93, 153, 212, .5);
+  padding: 30px;
 }
