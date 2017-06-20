@@ -1,14 +1,13 @@
 @{
   Layout="Shared/_Layout.cshtml";
 }
-<form action="/shows/new" method="post">
-  <label for="band-id">Band</label>
-  <select id='band-id' name='band-id' type='text'>
+<form action="/shows/add" method="post">
+  @* <select id='band-id' name='band-id' type='text'>
     @foreach (var band in @Model["allBands"])
     {
       <option value='@band.GetId()'>@band.GetBandName()</option>
     }
-  </select>
+  </select> *@
   <label for="show-location">Show Location (City, State)</label>
   <input id="show-location" name="show-location" type="text">
   <br>
@@ -16,12 +15,11 @@
   <label for="show-date">Show Date and Time</label>
   <input id="show-date" name="show-date" type="datetime-local">
   <br>
-  <label for="venue-id">Show Venue</label>
-  <select id='venue-id' name='venue-id' type='text'>
+  @* <select id='venue-id' name='venue-id' type='text'>
     @foreach (var venue in @Model["allVenues"])
     {
       <option value='@venue.GetId()'>@venue.GetVenueName()</option>
     }
-  </select>
+  </select> *@
   <button type="submit" class="btn btn-info">Add</button>
 </form>

@@ -16,7 +16,10 @@
   <ul>
     @foreach (var shows in @Model["bandShows"])
     {
-      <li>@shows.GetCityState(), @shows.GetDate()</li>
+      <li><h4><strong>@shows.GetCityState()</h4>
+      Venue: (need to show venue name)
+      <br>
+      Date and Show Time:</strong> @shows.GetDate()</li>
     }
   </ul>
 }
@@ -36,7 +39,7 @@
 @if (@Model["allVenues"].Count != 0)
 {
 <hr>
-<h3>Add a venue for this band:</h3>
+<h3>Add a venue this band has played at:</h3>
 <form action='/band/venue/success' method='post'>
   <input id='band-id' name='band-id' type='hidden' value='@Model["band"].GetId()'>
   <label for='venue-id'>Select a venue </label>
@@ -50,8 +53,9 @@
 </form>
 }
 <hr>
-@* <a href="/shows/new"><button type="click" class="btn btn-info">Add a new show to their tour</a></button>
-<form action='/band/delete/@Model["band"].GetId()' method="post"> *@
+<a href="/shows/new"><button type="click" class="btn btn-info">Add a new show to their tour</a></button>
+
+<form action='/band/delete/@Model["band"].GetId()' method="post">
   <input type="hidden" name="_method" value="DELETE">
   <button type="submit" class="btn btn-danger">Delete this band</button>
 </form>

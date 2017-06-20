@@ -186,7 +186,7 @@ namespace BandTracker.Objects
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO bands_venues_shows (bands_id, venues_id) OUTPUT INSERTED.venues_id VALUES (@BandId, @VenueId);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO bands_venues (bands_id, venues_id) OUTPUT INSERTED.venues_id VALUES (@BandId, @VenueId);", conn);
 
       SqlParameter bandIdParameter = new SqlParameter();
       bandIdParameter.ParameterName = "@BandId";
@@ -211,7 +211,7 @@ namespace BandTracker.Objects
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT venues.* FROM bands JOIN bands_venues_shows ON (bands.id = bands_venues_shows.bands_id) JOIN venues ON (bands_venues_shows.venues_id = venues.id) WHERE bands.id = @BandId;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT venues.* FROM bands JOIN bands_venues ON (bands.id = bands_venues.bands_id) JOIN venues ON (bands_venues.venues_id = venues.id) WHERE bands.id = @BandId;", conn);
       SqlParameter BandIdParam = new SqlParameter();
       BandIdParam.ParameterName = "@BandId";
       BandIdParam.Value = this.GetId().ToString();
@@ -241,53 +241,28 @@ namespace BandTracker.Objects
       }
       return venues;
     }
-    public void AddShow(Show newShow)
-    {
-      SqlConnection conn = DB.Connection();
-      conn.Open();
-
-      SqlCommand cmd = new SqlCommand("INSERT INTO bands_venues_shows (bands_id, shows_id) OUTPUT INSERTED.shows_id VALUES (@BandId, @ShowId);", conn);
-
-      SqlParameter bandIdParameter = new SqlParameter();
-      bandIdParameter.ParameterName = "@BandId";
-      bandIdParameter.Value = this.GetId();
-      cmd.Parameters.Add(bandIdParameter);
-
-      SqlParameter showIdParameter = new SqlParameter();
-      showIdParameter.ParameterName = "@ShowId";
-      showIdParameter.Value = newShow.GetId();
-      cmd.Parameters.Add(showIdParameter);
-
-      cmd.ExecuteNonQuery();
-
-      if (conn != null)
-      {
-        conn.Close();
-      }
-    }
-
     public List<Show> GetShows()
     {
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT shows.* FROM bands JOIN bands_venues_shows ON (bands.id = bands_venues_shows.bands_id) JOIN shows ON (bands_venues_shows.shows_id = shows.id) WHERE bands.id = @BandId;", conn);
-      SqlParameter BandIdParam = new SqlParameter();
-      BandIdParam.ParameterName = "@BandId";
-      BandIdParam.Value = this.GetId().ToString();
+      SqlCommand cmd = new SqlCommand("SELECT * FROM shows WHERE id = @ShowId;", conn);
+      SqlParameter showIdParameter = new SqlParameter();
+      showIdParameter.ParameterName = "@ShowId";
+      showIdParameter.Value = this.GetId();
 
-      cmd.Parameters.Add(BandIdParam);
-
+      cmd.Parameters.Add(showIdParameter);
       SqlDataReader rdr = cmd.ExecuteReader();
 
-      List<Show> shows = new List<Show>{};
-
+      List<Show> shows = new List<Show> {};
       while(rdr.Read())
       {
         int showId = rdr.GetInt32(0);
-        string showCityState = rdr.GetString(1);
-        DateTime showDate = rdr.GetDateTime(2);
-        Show newShow = new Show(showCityState, showDate, showId);
+        string cityState = rdr.GetString(1);
+        DateTime date = rdr.GetDateTime(2);
+        int bandId = rdr.GetInt32(3);
+        int venueId = rdr.GetInt32(4);
+        Show newShow = new Show(cityState, date, bandId, venueId, showId);
         shows.Add(newShow);
       }
       if (rdr != null)
@@ -305,7 +280,7 @@ namespace BandTracker.Objects
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("DELETE FROM bands WHERE id = @BandId; DELETE FROM bands_venues_shows WHERE bands_id = @BandId;", conn);
+      SqlCommand cmd = new SqlCommand("DELETE FROM bands WHERE id = @BandId; DELETE FROM bands_venues WHERE bands_id = @BandId;", conn);
       SqlParameter bandIdParameter = new SqlParameter();
       bandIdParameter.ParameterName = "@BandId";
       bandIdParameter.Value = this.GetId();

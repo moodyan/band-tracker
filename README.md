@@ -53,7 +53,7 @@ _In your preferred browser, navigate to http://localhost:5004/ and you should se
 
 ## Known Bugs
 
-_Show Class does not work as intended. Need to change many to many relationship to one-to-many for bands and venues?_
+_TO DO: Need to implement DeleteShow method for Venue and Band classes. Need to show band name and venue name on views. Find way to connect venues played at with shows._
 
 ## Support and contact details
 

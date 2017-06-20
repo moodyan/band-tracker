@@ -1,3 +1,5 @@
+
+using System;
 using System.Collections.Generic;
 using Nancy;
 using Nancy.ViewEngines.Razor;
@@ -59,8 +61,10 @@ namespace BandTracker
         Venue selectedVenue = Venue.Find(parameters.id);
         List<Band> venueBands = selectedVenue.GetBands();
         List<Band> allBands = Band.GetAll();
+        List<Show> venueShows = selectedVenue.GetShows();
         model.Add("venue", selectedVenue);
         model.Add("venueBands", venueBands);
+        model.Add("venueShows", venueShows);
         model.Add("allBands", allBands);
         return View["venue.cshtml", model];
       };
@@ -131,11 +135,21 @@ namespace BandTracker
       //   SelectedShow.DeleteShow();
       //   return View["success.cshtml"];
       // };
+      // Delete["venue/show/delete/{id}"]= parameters =>{
+      //   Show SelectedShow = Show.Find(parameters.id);
+      //   SelectedShow.DeleteShow();
+      //   return View["success.cshtml"];
+      // };
       Get["/shows/new"] = _ => {
-        return View["show_form.cshtml"];
+        Dictionary<string, object> model = new Dictionary<string, object>();
+        List<Band> allBands = Band.GetAll();
+        List<Venue> allVenues = Venue.GetAll();
+        model.Add("allBands", allBands);
+        model.Add("allVenues", allVenues);
+        return View["show_form.cshtml", model];
       };
       Post["/shows/new"] = _ => {
-        Show NewShow = new Show(Request.Form["show-location"], Request.Form["show-date"]);
+        Show NewShow = new Show(Request.Form["show-location"], Request.Form["show-date"], Request.Form["band-id"],  Request.Form["venue-id"]);
         NewShow.Save();
         return View["success.cshtml"];
       };

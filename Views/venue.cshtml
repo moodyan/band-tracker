@@ -7,6 +7,20 @@
 <h3>Venue Details:</h3>
 <p>@Model["venue"].GetDetails()</p>
 
+@if (@Model["venueShows"].Count != 0)
+{
+  <hr>
+  <h3>Tour:</h3>
+  <h5>(Click on show to delete it)</h5>
+  <ul>
+    @foreach (var shows in @Model["venueShows"])
+    {
+      <li><h4><strong>Band: (need to show band name)</h4>
+      Date and Show Time:</strong> @shows.GetDate()</li>
+    }
+  </ul>
+}
+
 @if (@Model["venueBands"].Count != 0)
 {
   <hr>

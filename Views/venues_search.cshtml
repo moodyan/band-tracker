@@ -4,7 +4,7 @@
 
 <h2>Search for a Venue</h2>
 <form action="/venues/search" method="post">
-  <label for="venue-search-location">Search for Venues By City: </label>
+  <label for="venue-search-location">City or Zip: </label>
   <input type="text" name="venue-search-location">
   <button type="submit" name="button" class="btn btn-info">Search</button>
 </form>
@@ -19,6 +19,6 @@
   }
   else
   {
-    <li>There is no venue in that city OR no venues have been added yet! <a href="/venues/new">Add a venue for this city</a></li>
+    <li>There is no venue in that city/zip OR no venues have been added yet! <a href="/venues/new">Add a venue for this city</a></li>
   }
 </ul>

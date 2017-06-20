@@ -170,7 +170,7 @@ namespace BandTracker.Objects
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO bands_venues_shows (venues_id, bands_id) VALUES (@VenueId, @BandId);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO bands_venues (venues_id, bands_id) VALUES (@VenueId, @BandId);", conn);
       SqlParameter venueIdParameter = new SqlParameter();
       venueIdParameter.ParameterName = "@VenueId";
       venueIdParameter.Value = this.GetId();
@@ -193,7 +193,7 @@ namespace BandTracker.Objects
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT bands.* FROM venues JOIN bands_venues_shows ON (venues.id = bands_venues_shows.venues_id) JOIN bands ON (bands_venues_shows.bands_id = bands.id) WHERE venues.id = @VenueId;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT bands.* FROM venues JOIN bands_venues ON (venues.id = bands_venues.venues_id) JOIN bands ON (bands_venues.bands_id = bands.id) WHERE venues.id = @VenueId;", conn);
       SqlParameter venueIdParameter = new SqlParameter();
       venueIdParameter.ParameterName = "@VenueId";
       venueIdParameter.Value = this.GetId();
@@ -253,7 +253,7 @@ namespace BandTracker.Objects
       SqlConnection conn = DB.Connection();
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("DELETE FROM venues WHERE id = @VenueId; DELETE FROM bands_venues_shows WHERE venues_id = @VenueId;", conn);
+      SqlCommand cmd = new SqlCommand("DELETE FROM venues WHERE id = @VenueId; DELETE FROM bands_venues WHERE venues_id = @VenueId;", conn);
       SqlParameter venueIdParameter = new SqlParameter();
       venueIdParameter.ParameterName = "@VenueId";
       venueIdParameter.Value = this.GetId();
@@ -301,6 +301,40 @@ namespace BandTracker.Objects
         conn.Close();
       }
       return allVenues;
+    }
+    public List<Show> GetShows()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+
+      SqlCommand cmd = new SqlCommand("SELECT * FROM shows WHERE id = @ShowId;", conn);
+      SqlParameter showIdParameter = new SqlParameter();
+      showIdParameter.ParameterName = "@ShowId";
+      showIdParameter.Value = this.GetId();
+
+      cmd.Parameters.Add(showIdParameter);
+      SqlDataReader rdr = cmd.ExecuteReader();
+
+      List<Show> shows = new List<Show> {};
+      while(rdr.Read())
+      {
+        int showId = rdr.GetInt32(0);
+        string cityState = rdr.GetString(1);
+        DateTime date = rdr.GetDateTime(2);
+        int bandId = rdr.GetInt32(3);
+        int venueId = rdr.GetInt32(4);
+        Show newShow = new Show(cityState, date, bandId, venueId, showId);
+        shows.Add(newShow);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if (conn != null)
+      {
+        conn.Close();
+      }
+      return shows;
     }
   }
 }
