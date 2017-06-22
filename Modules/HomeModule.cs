@@ -75,15 +75,17 @@ namespace BandTracker
         return View["success.cshtml"];
       };
       Patch["/venue/update/details/{id}"] = parameters => {
-        Venue CurrentVenue = Venue.Find(parameters.id);
+        Venue currentVenue = Venue.Find(parameters.id);
         string newDetails = Request.Form["new-details"];
-        CurrentVenue.UpdateDetails(newDetails);
+        currentVenue.UpdateDetails(newDetails);
         Dictionary<string, object> model = new Dictionary<string, object>();
-        List<Band> VenueBands = CurrentVenue.GetBands();
-        List<Band> AllBands = Band.GetAll();
-        model.Add("venue", CurrentVenue);
-        model.Add("venueBands", VenueBands);
-        model.Add("allBands", AllBands);
+        List<Band> venueBands = currentVenue.GetBands();
+        List<Band> allBands = Band.GetAll();
+        List<Show> venueShows = currentVenue.GetShows();
+        model.Add("venue", currentVenue);
+        model.Add("venueBands", venueBands);
+        model.Add("venueShows", venueShows);
+        model.Add("allBands", allBands);
         return View["venue.cshtml", model];
       };
       Get["/band/delete/{id}"] = parameters => {
